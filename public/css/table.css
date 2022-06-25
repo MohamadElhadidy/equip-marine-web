@@ -1,0 +1,68 @@
+table.dataTable tbody td{
+  font-size: 1rem ;
+}
+
+table.dataTable thead th{
+  font-size: 1.2rem ;
+}
+.dataTables_filter input{
+  text-align: center;
+  padding: 5px 15px ;
+}
+.dataTables_length{
+  direction: rtl;
+}
+  table.dataTable thead th,
+  table.dataTable tbody td {
+    padding: 3px ;
+  }
+.buttons-print, .buttons-excel{
+margin-left: 10px;
+background: #73a294;
+color: white;
+border: 2px black solid;
+border-radius: 25px;
+padding: 5px 15px;
+cursor: pointer;
+}
+
+div.dataTables_wrapper div.dataTables_processing {
+  background-color: rgb(6, 47, 114) ;
+  color: white ;
+  font-size: 1.2rem ;
+  width: 50% ;
+}
+.dataTables_paginate, .dataTables_info{
+  font-size: 1rem ;
+}
+@media print {
+  table{
+    direction: rtl;
+    border: 2px black solid;
+  }
+  table.dataTable thead th{
+    font-size: 1rem;
+    border: 2px black solid;
+  }
+    table.dataTable tbody td{
+    font-size: .8rem;
+    border: 2px black solid;
+  }
+  table.dataTable thead th,
+  table.dataTable tbody td {
+    padding: 1px ;
+  }
+
+  table.dataTable {
+    border-collapse: collapse ;
+  }
+  table.dataTable thead th{
+    background: #237b61;
+  }
+.h1, h1 {
+  font-size: 1.3rem !important;
+  text-align: center;
+  font-weight: bold;
+}
+
+}
