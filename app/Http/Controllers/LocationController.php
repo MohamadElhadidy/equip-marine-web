@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Building;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use DB;
 use App\Events\Notifications;
 use DataTables;
 
 
-class BuildingController extends Controller
+class LocationController extends Controller
 {
     public function __construct()
         {
         $this->middleware("auth");
-        $this->middleware("canView:buildings,write", [
+        $this->middleware("canView:locations,write", [
         'only' => [
             'create' ,
             'store' ,
@@ -22,18 +22,18 @@ class BuildingController extends Controller
             'update' ,
             ]
         ]);
-        $this->middleware("canView:buildings,read", [
+        $this->middleware("canView:locations,read", [
         'only' => [
             'index' ,
-            'buildingsData'
+            'locationsData'
             ]
         ]);
-        $this->middleware("canView:buildings,delete", [
+        $this->middleware("canView:locations,delete", [
         'only' => [
              'destroy' ,
             'restore',
             'trash' ,
-            'buildingsTrash'
+            'locationsTrash'
             ]
         ]);
     }
@@ -44,7 +44,7 @@ class BuildingController extends Controller
      */
     public function index()
     {
-        return view('buildings.report');
+        return view('locations.report');
     }
 
     /**
@@ -57,10 +57,14 @@ class BuildingController extends Controller
         $companies =  DB::table('hr.companies')
                 ->select('*')
                 ->get();
+        $types =  DB::table('types')
+                ->select('*')
+                ->get();
 
         
-        return view('buildings.create',[
-            'companies' =>$companies
+        return view('locations.create',[
+            'companies' =>$companies,
+            'types' =>$types
         ]);
     }
 
@@ -93,16 +97,16 @@ class BuildingController extends Controller
                 'ownership_date.required' => '  ادخل    تاريخ التعاقد   ',
                 
             ]);
-            $building = new Building;
+            $location = new Location;
     
-            $building->code =$request->code;
-            $building->name = $request->name;
-            $building->company = $request->company;
-            $building->location = $request->location;
-            $building->ownership = $request->ownership;
-            $building->ownership_date = $request->ownership_date;
-            $building->notes = $request->notes;
-            $building->save();
+            $location->code =$request->code;
+            $location->name = $request->name;
+            $location->company = $request->company;
+            $location->location = $request->location;
+            $location->ownership = $request->ownership;
+            $location->ownership_date = $request->ownership_date;
+            $location->notes = $request->notes;
+            $location->save();
 
             $company = DB::table('hr.companies')->select('*')->where('id' ,$request->company)->first();
 
@@ -113,10 +117,10 @@ class BuildingController extends Controller
             $body .=  '   الموقع  '.$request->location;$body.= "\r\n /";
             $body .=  '   الملكية  '.$request->ownership;$body.= "\r\n /";
 
-            $request->session()->flash('NewBuilding', $title);
+            $request->session()->flash('NewLocation', $title);
             
             $auth = new AuthController();
-            $auth->notify(auth()->user()->id, 2, $title, $body, '/buildings', 'action');
+            $auth->notify(auth()->user()->id, 2, $title, $body, '/locations', 'action');
 
             event(new Notifications($title));
 
@@ -140,15 +144,15 @@ class BuildingController extends Controller
      * @param  \App\Models\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function edit(Building $building)
+    public function edit(Location $location)
     {
 
         $companies =  DB::table('hr.companies')
                 ->select('*')
                 ->get();
 
-        return view('buildings.edit',[
-            'building' => $building,
+        return view('locations.edit',[
+            'location' => $location,
             'companies' =>$companies
         ]);
     }
@@ -160,11 +164,11 @@ class BuildingController extends Controller
      * @param  \App\Models\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Building $building)
+    public function update(Request $request, Location $location)
     {
         $validatedData = $request->validate([
-            'code' => ['required', 'max:255' , 'unique:locations,code,'.$building->id],
-            'name' => ['required','max:255',  'unique:locations,name,'.$building->id],
+            'code' => ['required', 'max:255' , 'unique:locations,code,'.$location->id],
+            'name' => ['required','max:255',  'unique:locations,name,'.$location->id],
             'company' => ['required'],
             'location' => ['required'],
             'ownership' => ['required'],
@@ -184,50 +188,50 @@ class BuildingController extends Controller
                 
             ]);
             $body = '';
-            if($building->code != $request->code){
-                    $body .=  '  تم تغيير كود المنشآة من '.$building->code. ' الى '.$request->code;
+            if($location->code != $request->code){
+                    $body .=  '  تم تغيير كود المنشآة من '.$location->code. ' الى '.$request->code;
                     $body.= "\r\n /";
             }   
-            if($building->name != $request->name) {
-                $body .=  '  تم تغيير اسم المنشآة من ' . $building->name. ' الى '.$request->name;
+            if($location->name != $request->name) {
+                $body .=  '  تم تغيير اسم المنشآة من ' . $location->name. ' الى '.$request->name;
                 $body.= "\r\n /";
             }
-            if($building->company != $request->company) {
-                $company1 = DB::table('hr.companies')->select('*')->where('id' ,$building->company)->first();
+            if($location->company != $request->company) {
+                $company1 = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
                 $company2 = DB::table('hr.companies')->select('*')->where('id' ,$request->company)->first();
                 $body .=  '  تم تغيير   الشركة التابعة لها  من ' . $company1->name_ar. ' الى '.$company2->name_ar;
                 $body.= "\r\n /";
             }
-            if($building->location != $request->location) {
-                $body .=  '  تم تغيير الموقع  من ' . $building->location. ' الى '.$request->location;
+            if($location->location != $request->location) {
+                $body .=  '  تم تغيير الموقع  من ' . $location->location. ' الى '.$request->location;
                 $body.= "\r\n /";
             }
-            if($building->ownership != $request->ownership) {
-                $body .=  '  تم تغيير  الملكية من ' . $building->ownership. ' الى '.$request->ownership;
+            if($location->ownership != $request->ownership) {
+                $body .=  '  تم تغيير  الملكية من ' . $location->ownership. ' الى '.$request->ownership;
                 $body.= "\r\n /";
             }
-            if($building->ownership_date != $request->ownership_date) {
-                $body .=  '  تم تغيير تاريخ التعاقد من ' . $building->ownership_date. ' الى '.$request->ownership_date;
+            if($location->ownership_date != $request->ownership_date) {
+                $body .=  '  تم تغيير تاريخ التعاقد من ' . $location->ownership_date. ' الى '.$request->ownership_date;
                 $body.= "\r\n /";
             }
  
-            $building->code =$request->code;
-            $building->name = $request->name;
-            $building->company = $request->company;
-            $building->location = $request->location;
-            $building->ownership = $request->ownership;
-            $building->ownership_date = $request->ownership_date;
-            $building->notes = $request->notes;
-            $building->save();
+            $location->code =$request->code;
+            $location->name = $request->name;
+            $location->company = $request->company;
+            $location->location = $request->location;
+            $location->ownership = $request->ownership;
+            $location->ownership_date = $request->ownership_date;
+            $location->notes = $request->notes;
+            $location->save();
 
 
             $title = 'تم تعديل المنشآة بنجاح';
 
 
-            $request->session()->flash('EditBuilding', $title);
+            $request->session()->flash('EdiLocation', $title);
             $auth = new AuthController();
 
-            if($body != null)$auth->notify(auth()->user()->id, 2, $title, $body, '/buildings', 'action');
+            if($body != null)$auth->notify(auth()->user()->id, 2, $title, $body, '/locations', 'action');
 
         event(new Notifications($title));
 
@@ -237,7 +241,7 @@ class BuildingController extends Controller
         
         
         return  back()->with([
-            'Building' => $building,
+            'location' => $location,
             'companies' =>$companies
         ]);
         
@@ -251,48 +255,48 @@ class BuildingController extends Controller
      */
     public function destroy($id)
     {
-            $building = Building::find($id);    
-            $building->is_delete  = 1;
-            $building->save();
+            $location = Location::find($id);    
+            $location->is_delete  = 1;
+            $location->save();
 
             $title = 'تم حذف المنشآة بنجاح';
 
             $auth = new AuthController();
 
-            $company = DB::table('hr.companies')->select('*')->where('id' ,$building->company)->first();
+            $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
 
             $title = 'تم   حذف منشآة  ';
-            $body =  '  تم حذف منشآة   كود  '.$building->code;$body.= "\r\n /";
-            $body .=  'اسم   '.$building->name;$body.= "\r\n /";
+            $body =  '  تم حذف منشآة   كود  '.$location->code;$body.= "\r\n /";
+            $body .=  'اسم   '.$location->name;$body.= "\r\n /";
             $body .=  ' الشركة التابعة لها  '.$company->name_ar;$body.= "\r\n /";
-            $body .=  '   الموقع  '.$building->location;$body.= "\r\n /";
-            $body .=  '   الملكية  '.$building->ownership;$body.= "\r\n /";
+            $body .=  '   الموقع  '.$location->location;$body.= "\r\n /";
+            $body .=  '   الملكية  '.$location->ownership;$body.= "\r\n /";
 
-            if($body != null)$auth->notify(auth()->user()->id, 2, $title, $body, '/buildings', 'action');
+            if($body != null)$auth->notify(auth()->user()->id, 2, $title, $body, '/locations', 'action');
 
             event(new Notifications($title));
 
     }
    
-    public function buildingsData()
+    public function locationsData()
     {
-            $buildings = Building::where('is_delete',0)->get();
+            $locations = Location::where('is_delete',0)->get();
             
 
-            foreach ($buildings as  $building) {
-                    $company = DB::table('hr.companies')->select('*')->where('id' ,$building->company)->first();
-                    $building->company   = $company->name_ar;
+            foreach ($locations as  $location) {
+                    $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
+                    $location->company   = $company->name_ar;
                 }
                 
-            return DataTables::of($buildings) 
-                ->addColumn('action', function ($building) {
+            return DataTables::of($locations) 
+                ->addColumn('action', function ($location) {
                     $action = '';
                     $auth = new AuthController();
-                    if($auth->canview('buildings', 'write')){
-                        $action .='<a  href="/buildings/' . $building->id . '/edit" class="edit-button"><i class="fas fa-edit"></i> </a>';
+                    if($auth->canview('locations', 'write')){
+                        $action .='<a  href="/locations/' . $location->id . '/edit" class="edit-button"><i class="fas fa-edit"></i> </a>';
                     }
-                    if($auth->canview('buildings', 'delete')){
-                        $action .='<a  coords="' . $building->name . '"  id="' . $building->id . '" onclick="getId(this.id, this.coords)"  href="#" class="delete-button"><i class="fas fa-trash-alt"></i> </a>';
+                    if($auth->canview('locations', 'delete')){
+                        $action .='<a  coords="' . $location->name . '"  id="' . $location->id . '" onclick="getId(this.id, this.coords)"  href="#" class="delete-button"><i class="fas fa-trash-alt"></i> </a>';
                     }
                     return $action;
                 })->make(true);
@@ -302,24 +306,24 @@ class BuildingController extends Controller
 
     public function trash()
     {
-        return view('buildings.trash');
+        return view('locations.trash');
     }
     
-        public function buildingsTrash()
+        public function locationsTrash()
     {
-            $buildings = Building::where('is_delete',1)->get();
+            $locations = Location::where('is_delete',1)->get();
             
-            foreach ($buildings as  $building) {
-                    $company = DB::table('hr.companies')->select('*')->where('id' ,$building->company)->first();
-                    $building->company   = $company->name_ar;
+            foreach ($locations as  $location) {
+                    $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
+                    $location->company   = $company->name_ar;
                 }
                 
-            return DataTables::of($buildings) 
-                ->addColumn('action', function ($building) {
+            return DataTables::of($locations) 
+                ->addColumn('action', function ($location) {
                     $action = '';
                     $auth = new AuthController();
-                    if($auth->canview('buildings', 'delete')){
-                        $action .='<a  coords="' . $building->name . '"  id="' . $building->id . '" onclick="getId(this.id, this.coords)"  href="#" class="delete-button"><i class="fas fa-trash-restore"></i> </a>';
+                    if($auth->canview('locations', 'delete')){
+                        $action .='<a  coords="' . $location->name . '"  id="' . $location->id . '" onclick="getId(this.id, this.coords)"  href="#" class="delete-button"><i class="fas fa-trash-restore"></i> </a>';
                     }
                     return $action;
                 })->make(true);
@@ -328,24 +332,24 @@ class BuildingController extends Controller
     public function restore($id)
     {
 
-            $building = Building::find($id);    
-            $building->is_delete  = 0;
-            $building->save();
+            $location = Location::find($id);    
+            $location->is_delete  = 0;
+            $location->save();
 
             $title = 'تم استرجاع المنشآة بنجاح';
 
             $auth = new AuthController();
 
-            $company = DB::table('hr.companies')->select('*')->where('id' ,$building->company)->first();
+            $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
 
             $title = 'تم   استرجاع منشآة  ';
-            $body =  '  تم استرجاع منشآة   كود  '.$building->code;$body.= "\r\n /";
-            $body .=  'اسم   '.$building->name;$body.= "\r\n /";
+            $body =  '  تم استرجاع منشآة   كود  '.$location->code;$body.= "\r\n /";
+            $body .=  'اسم   '.$location->name;$body.= "\r\n /";
             $body .=  ' الشركة التابعة لها  '.$company->name_ar;$body.= "\r\n /";
-            $body .=  '   الموقع  '.$building->location;$body.= "\r\n /";
-            $body .=  '   الملكية  '.$building->ownership;$body.= "\r\n /";
+            $body .=  '   الموقع  '.$location->location;$body.= "\r\n /";
+            $body .=  '   الملكية  '.$location->ownership;$body.= "\r\n /";
 
-            if($body != null)$auth->notify(auth()->user()->id, 2, $title, $body, '/buildings', 'action');
+            if($body != null)$auth->notify(auth()->user()->id, 2, $title, $body, '/locations', 'action');
 
             event(new Notifications($title));
     }

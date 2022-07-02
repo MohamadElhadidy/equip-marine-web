@@ -3,15 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EquipmentController;
-use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ManufacturingController;
 use App\Http\Controllers\WorkshopController;
-use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DailyConditionsController;
-use App\Http\Controllers\RequestsController;
-use App\Http\Controllers\VesselsController;
-use App\Http\Controllers\MaintenanceController;
+// use App\Http\Controllers\DailyConditionsController;
+// use App\Http\Controllers\RequestsController;
+// use App\Http\Controllers\VesselsController;
+// use App\Http\Controllers\MaintenanceController;
 use App\Models\Equipment;
 
 Route::middleware(['auth','isActive'])->group(function () {
@@ -54,11 +53,11 @@ Route::get('/manufacturingTrash', [ManufacturingController::class, 'manufacturin
 Route::delete('/manufacturing/restore/{id}', [ManufacturingController::class, 'restore'])->name('/manufacturing/restore/{id}');
 Route::resource('manufacturing', ManufacturingController::class);
 
-Route::get('/buildings/trash', [BuildingController::class, 'trash'])->name('/buildings/trash');
-Route::get('/buildingsTrash', [BuildingController::class, 'buildingsTrash'])->name('buildingsTrash');
-Route::delete('/buildings/restore/{id}', [BuildingController::class, 'restore'])->name('/buildings/restore/{id}');
-Route::get('/buildingsData', [BuildingController::class, 'buildingsData'])->name('buildingsData');
-Route::resource('buildings', BuildingController::class);
+Route::get('/locations/trash', [LocationController::class, 'trash'])->name('/locations/trash');
+Route::get('/locations', [LocationController::class, 'locationsTrash'])->name('locations');
+Route::delete('/locations/restore/{id}', [LocationController::class, 'restore'])->name('/locations/restore/{id}');
+Route::get('/locationsData', [LocationController::class, 'locationsData'])->name('locationsData');
+Route::resource('locations', LocationController::class);
 
 Route::get('/workshops/trash', [WorkshopController::class, 'trash'])->name('/workshops/trash');
 Route::get('/workshopsTrash', [WorkshopController::class, 'workshopsTrash'])->name('workshopsTrash');
@@ -66,11 +65,7 @@ Route::delete('/workshops/restore/{id}', [WorkshopController::class, 'restore'])
 Route::get('/workshopsData', [WorkshopController::class, 'workshopsData'])->name('workshopsData');
 Route::resource('workshops', WorkshopController::class);
 
-Route::get('/warehouses/trash', [WarehouseController::class, 'trash'])->name('/warehouses/trash');
-Route::get('/warehousesTrash', [WarehouseController::class, 'warehousesTrash'])->name('warehousesTrash');
-Route::delete('/warehouses/restore/{id}', [WarehouseController::class, 'restore'])->name('/warehouses/restore/{id}');
-Route::get('/warehousesData', [WarehouseController::class, 'warehousesData'])->name('warehousesData');
-Route::resource('warehouses', WarehouseController::class);
+/*--------------------------
 
 Route::get('/dailyConditions/trash', [DailyConditionsController::class, 'trash'])->name('/equipments/trash');
 Route::get('/dailyConditionsTrash', [DailyConditionsController::class, 'dailyConditionsTrash'])->name('dailyConditionsTrash');
@@ -101,7 +96,7 @@ Route::get('/maintenance/print/{id}', [MaintenanceController::class, 'print'])->
 Route::get('/maintenanceData', [MaintenanceController::class, 'maintenanceData'])->name('maintenanceData');
 Route::put('/maintenance/done/{id}', [MaintenanceController::class, 'done'])->name('/maintenance/done');
 Route::resource('maintenance', MaintenanceController::class);
-
+*/
 });
 
 Route::get('/login', function () { return view('login');})->name('login')->middleware('guest');

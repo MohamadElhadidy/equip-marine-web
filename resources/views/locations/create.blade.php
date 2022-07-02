@@ -1,5 +1,5 @@
 @extends('layout.app')
-@section('title', ' إضافة  منشآة / ساحه جديدة')
+@section('title', ' إضافة موقع عمل')
 @section('style')
 <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/daterangepicker.css') }}">
@@ -10,7 +10,7 @@
 
       <section class="section">
           <div class="section-header">
-                       <h1> إضافة  منشآة / ساحه جديدة</h1>
+                       <h1> إضافة  موقع عمل</h1>
             
           </div>
           <div class="section-body">
@@ -32,17 +32,17 @@
                            
                            
                           <div class="form-group col-md-4 col-12">
-                            <label  class="float-right"> كـــود المنشآة </label>
+                            <label  class="float-right"> الكـــود  </label>
                             <input type="text" class="form-control"  name="code"   value="{{ old('code') }}"  required="">
-                            <div class="invalid-feedback">     ادخل  كـــود المنشآة </div>
+                            <div class="invalid-feedback">     ادخل  الكـــود  </div>
                        <strong  class="float-right" style="color: red;">{{ $errors->first('code') }}</strong>
 
                           </div>
                           
                          <div class="form-group col-md-4 col-12">
-                            <label  class="float-right"> إســـــم المنشآة </label>
+                            <label  class="float-right"> الإســـــم  </label>
                             <input type="text" class="form-control"  name="name"   value="{{ old('name') }}"  required="">
-                            <div class="invalid-feedback">     ادخل  إســـــم المنشآة </div>
+                            <div class="invalid-feedback">     ادخل  الإســـــم  </div>
                        <strong  class="float-right" style="color: red;">{{ $errors->first('name') }}</strong>
                           </div>
                            <div class="form-group col-md-4 col-12">
@@ -54,6 +54,18 @@
                           </div>
                         </div>
 <div class="row">     
+      <div class="form-group col-md-4 col-12">
+                            <label  class="float-right">النوع</label>
+                            <select class="form-control select2" name='type' required >
+                        <option disabled selected value="">أختر النوع   </option>
+                        @foreach ( $types as $type)
+                            <option value=" {{ $type->id }}" {{ (old('type') == $type->id ? "selected":"") }}> {{ $type->name }}</option>
+                        @endforeach                   
+                      </select>       
+                        <div class="invalid-feedback">     ادخل     النوع      </div>
+                      <strong  class="float-right" style="color: red;">{{ $errors->first('type') }}</strong>
+
+                          </div>
                            <div class="form-group col-md-4 col-12">
                             <label  class="float-right">   الشركة التابعة لها   </label>
                             <select class="form-control select2" name='company' required >
@@ -78,18 +90,34 @@
                       <strong  class="float-right" style="color: red;">{{ $errors->first('ownership') }}</strong>
 
                           </div>
-                            <div class="form-group col-md-4 col-12">
+                           
+                        </div>
+                        <div class="row">         
+                          
+                 <div class="form-group col-md-4 col-12">
                             <label  class="float-right">  تاريخ التعاقد / الشراء</label>
                           <input type="text" name="ownership_date"  class="form-control datepicker">
                             <div class="invalid-feedback">     ادخل  تاريخ التعاقد / الشراء  </div>
                         <strong  class="float-right" style="color: red;">{{ $errors->first('ownership_date') }}</strong>
 
                           </div>
-                        </div>
-                        <div class="row">         
+                          <div class="form-group col-md-4 col-12">
+                            <label  class="float-right"> متوسط السعة    </label>
+                            <input type="text" class="form-control"  name="capacity"   value="{{ old('capacity') }}"  required="">
+                            <div class="invalid-feedback">     ادخل     متوسط السعة  </div>
+                       <strong  class="float-right" style="color: red;">{{ $errors->first('capacity') }}</strong>
+
+                          </div>
+                           <div class="form-group col-md-4 col-12">
+                            <label  class="float-right"> المساحة    </label>
+                            <input type="text" class="form-control"  name="size"   value="{{ old('size') }}"  required="">
+                            <div class="invalid-feedback">     ادخل     المساحة  </div>
+                       <strong  class="float-right" style="color: red;">{{ $errors->first('size') }}</strong>
+
+                          </div>
+                          </div>
+                           <div class="row">         
                           
-                
-                        
                           <div class="form-group col-md-4 col-12">
                             <label  class="float-right">    تفاصيل أخرى  </label>
                             <input type="text" class="form-control"  name="notes"   value="{{ old('notes') }}" >
@@ -113,8 +141,8 @@
   <script src="{{ asset('js/daterangepicker.js')}}"></script>
 <script>
 
-$('#addBuild'). addClass('active');
-$("#buildings ul.dropdown-menu").css("display", "block");
+$('#addLoc'). addClass('active');
+$("#locations ul.dropdown-menu").css("display", "block");
 
   $('#myForm').on('submit', function(e){
       var form = $(this);

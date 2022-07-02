@@ -165,30 +165,16 @@
               </ul>
             </li>
             @endcanView
-              @canView('warehouses','read')
-            <li class="dropdown" id='warehouses'>
-              <a href="#" class="nav-link has-dropdown"><i class="fas fa-warehouse"></i><span>المخازن</span></a>
+            @canView('locations','read')
+            <li class="dropdown" id="locations">
+              <a href="#" class="nav-link has-dropdown"><i class="fas fa-building"></i><span>مواقع العمل</span></a>
               <ul class="dropdown-menu">
-                @canView('warehouses','write')
-                <li id="addWare"><a class="nav-link" id="add" href="/warehouses/create">إضافة مخزن</a></li>
+                @canView('locations','write')
+                <li  id="addLoc"><a class="nav-link" id="add" href="/locations/create"> إضافة  موقع عمل  </a></li>
                 @endcanView
-                <li id="reportWare"><a class="nav-link"  id="report" href="/warehouses">تقرير المخازن</a></li>
-                @canView('warehouses','delete')
-                <li id="trashWare"><a class="nav-link"   id="trash" href="/warehouses/trash">تقرير المحذوف</a></li>
-                @endcanView
-              </ul>
-            </li>
-            @endcanView
-            @canView('buildings','read')
-            <li class="dropdown" id="buildings">
-              <a href="#" class="nav-link has-dropdown"><i class="fas fa-building"></i><span>المنشآت  / الساحات</span></a>
-              <ul class="dropdown-menu">
-                @canView('buildings','write')
-                <li  id="addBuild"><a class="nav-link" id="add" href="/buildings/create"> إضافة  منشآة / ساحه</a></li>
-                @endcanView
-                <li id="reportBuild"><a class="nav-link" id="report"  href="/buildings">تقرير المنشآت  / الساحات</a></li>
-                @canView('buildings','delete')
-                <li id="trashBuild"><a class="nav-link"  id="trash"  href="/buildings/trash">تقرير المحذوف</a></li>
+                <li id="reportLoc"><a class="nav-link" id="report"  href="/locations">تقرير مواقع العمل</a></li>
+                @canView('locations','delete')
+                <li id="trashLoc"><a class="nav-link"  id="trash"  href="/locations/trash">تقرير المحذوف</a></li>
                 @endcanView
               </ul>
             </li>

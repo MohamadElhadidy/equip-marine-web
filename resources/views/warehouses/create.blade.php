@@ -57,20 +57,7 @@
 <div class="row">     
 
                          
-                         <div class="form-group col-md-4 col-12">
-                            <label  class="float-right"> متوسط السعة    </label>
-                            <input type="text" class="form-control"  name="capacity"   value="{{ old('capacity') }}"  required="">
-                            <div class="invalid-feedback">     ادخل     متوسط السعة  </div>
-                       <strong  class="float-right" style="color: red;">{{ $errors->first('capacity') }}</strong>
-
-                          </div>
-                           <div class="form-group col-md-4 col-12">
-                            <label  class="float-right"> المساحة    </label>
-                            <input type="text" class="form-control"  name="size"   value="{{ old('size') }}"  required="">
-                            <div class="invalid-feedback">     ادخل     المساحة  </div>
-                       <strong  class="float-right" style="color: red;">{{ $errors->first('size') }}</strong>
-
-                          </div>
+                       
                             <div class="form-group col-md-4 col-12">
                             <label  class="float-right">   الشركة التابعة لها   </label>
                             <select class="form-control select2" name='company' required >
