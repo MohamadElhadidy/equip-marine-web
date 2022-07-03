@@ -14,16 +14,16 @@
             
           </div>
           <div class="section-body">
-            @if (session('NewBuilding'))
+            @if (session('NewLocation'))
                 <div class="alert alert-success">
-                    {{ session('NewBuilding') }}
+                    {{ session('NewLocation') }}
                 </div>
             @endif
           
             <div class="row mt-sm-4">
               <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
-                  <form method="post" class="needs-validation" novalidate="" action="/buildings" enctype="multipart/form-data"  id="myForm" dir="rtl">
+                  <form method="post" class="needs-validation" novalidate="" action="/locations" enctype="multipart/form-data"  id="myForm" dir="rtl">
                     @csrf
                     <div class="card-header">
                     </div>
@@ -56,7 +56,7 @@
 <div class="row">     
       <div class="form-group col-md-4 col-12">
                             <label  class="float-right">النوع</label>
-                            <select class="form-control select2" name='type' required >
+                            <select class="form-control select2" name='type' required  id="type">
                         <option disabled selected value="">أختر النوع   </option>
                         @foreach ( $types as $type)
                             <option value=" {{ $type->id }}" {{ (old('type') == $type->id ? "selected":"") }}> {{ $type->name }}</option>
@@ -101,26 +101,26 @@
                         <strong  class="float-right" style="color: red;">{{ $errors->first('ownership_date') }}</strong>
 
                           </div>
-                          <div class="form-group col-md-4 col-12">
+                           <div class="form-group col-md-4 col-12">
+                            <label  class="float-right">    تفاصيل أخرى  </label>
+                            <input type="text" class="form-control"  name="notes"   value="{{ old('notes') }}" >
+                          </div>
+                          <div class="form-group col-md-4 col-12 warehouse">
                             <label  class="float-right"> متوسط السعة    </label>
                             <input type="text" class="form-control"  name="capacity"   value="{{ old('capacity') }}"  required="">
                             <div class="invalid-feedback">     ادخل     متوسط السعة  </div>
                        <strong  class="float-right" style="color: red;">{{ $errors->first('capacity') }}</strong>
 
                           </div>
-                           <div class="form-group col-md-4 col-12">
+                          
+                          </div>
+                           <div class="row warehouse">         
+                          <div class="form-group col-md-4 col-12">
                             <label  class="float-right"> المساحة    </label>
                             <input type="text" class="form-control"  name="size"   value="{{ old('size') }}"  required="">
                             <div class="invalid-feedback">     ادخل     المساحة  </div>
                        <strong  class="float-right" style="color: red;">{{ $errors->first('size') }}</strong>
 
-                          </div>
-                          </div>
-                           <div class="row">         
-                          
-                          <div class="form-group col-md-4 col-12">
-                            <label  class="float-right">    تفاصيل أخرى  </label>
-                            <input type="text" class="form-control"  name="notes"   value="{{ old('notes') }}" >
                           </div>
                         </div>
                         
@@ -141,6 +141,23 @@
   <script src="{{ asset('js/daterangepicker.js')}}"></script>
 <script>
 
+$(document).ready(function() {
+  var val = $('select[name=type] option').filter(':selected').val();
+  if(val != 1){
+    $('.warehouse').hide();
+    $(".warehouse input").prop('disabled', true);
+  }
+});
+
+$('#type').on('change', function() {
+   if(this.value == 1){
+      $('.warehouse').show();
+      $(".warehouse input").prop('disabled', false);
+  }else{
+    $('.warehouse').hide();
+    $(".warehouse input").prop('disabled', true);
+  }
+});
 $('#addLoc'). addClass('active');
 $("#locations ul.dropdown-menu").css("display", "block");
 

@@ -81,18 +81,20 @@ class LocationController extends Controller
             'name' => ['required','max:255', 'unique:locations'],
             'company' => ['required'],
             'location' => ['required'],
+            'type' => ['required'],
             'ownership' => ['required'],
             'ownership_date' => ['required'],
             ],
             [
-                'code.unique' => '   كـــود المنشآة   موجود  ',
-                'code.required' => '  ادخل    كـــود المنشآة   ',
+                'code.unique' => '   الكود    موجود  ',
+                'code.required' => '  ادخل    الكود    ',
 
-                'name.unique' => ' إســـــم المنشآة    موجود  ',
-                'name.required' => ' ادخل إســـــم المنشآة ',
+                'name.unique' => ' الاســـم     موجود  ',
+                'name.required' => ' ادخل الاســـم  ',
 
-                'company.required' => '  ادخل    الشركة التابعة لها   ',
+                'company.required' => '  ادخل    الشركة التابعة    ',
                 'location.required' => '  ادخل   الموقع     ',
+                'type.required' => '  ادخل   النوع     ',
                 'ownership.required' => '  ادخل    الملكية   ',
                 'ownership_date.required' => '  ادخل    تاريخ التعاقد   ',
                 
@@ -102,20 +104,27 @@ class LocationController extends Controller
             $location->code =$request->code;
             $location->name = $request->name;
             $location->company = $request->company;
+            $location->type = $request->type;
             $location->location = $request->location;
             $location->ownership = $request->ownership;
             $location->ownership_date = $request->ownership_date;
+            if(isset($request->capacity))  $location->capacity = $request->capacity;
+            if(isset($request->size))  $location->size = $request->size;
             $location->notes = $request->notes;
             $location->save();
 
             $company = DB::table('hr.companies')->select('*')->where('id' ,$request->company)->first();
+            $type = DB::table('types')->select('*')->where('id' ,$request->type)->first();
 
-            $title = 'تم   إضافة منشآة جديدة ';
-            $body =  '  تم إضافة منشآة جديدة  كود  '.$request->code;$body.= "\r\n /";
+            $title = 'تم   إضافة موقع عمل ';
+            $body =  '  تم إضافة '.$type->name;$body.= "\r\n /";
+            $body .=  'كود  '.$request->code;$body.= "\r\n /";
             $body .=  'اسم   '.$request->name;$body.= "\r\n /";
             $body .=  ' الشركة التابعة لها  '.$company->name_ar;$body.= "\r\n /";
             $body .=  '   الموقع  '.$request->location;$body.= "\r\n /";
             $body .=  '   الملكية  '.$request->ownership;$body.= "\r\n /";
+            if(isset($request->capacity)) {$body .=  '   متوسط السعة  '.$request->capacity;$body.= "\r\n /";}
+            if(isset($request->size)) {$body .=  '   المساحة  '.$request->size;$body.= "\r\n /";}
 
             $request->session()->flash('NewLocation', $title);
             
@@ -150,9 +159,13 @@ class LocationController extends Controller
         $companies =  DB::table('hr.companies')
                 ->select('*')
                 ->get();
+        $types =  DB::table('types')
+                ->select('*')
+                ->get();
 
         return view('locations.edit',[
             'location' => $location,
+            'types' => $types,
             'companies' =>$companies
         ]);
     }
@@ -171,29 +184,37 @@ class LocationController extends Controller
             'name' => ['required','max:255',  'unique:locations,name,'.$location->id],
             'company' => ['required'],
             'location' => ['required'],
+            'type' => ['required'],
             'ownership' => ['required'],
             'ownership_date' => ['required'],
             ],
             [
-                'code.unique' => '   كـــود المنشآة   موجود  ',
-                'code.required' => '  ادخل    كـــود المنشآة   ',
+                'code.unique' => '   الكود    موجود  ',
+                'code.required' => '  ادخل    الكود    ',
 
-                'name.unique' => ' إســـــم المنشآة    موجود  ',
-                'name.required' => ' ادخل إســـــم المنشآة ',
+                'name.unique' => ' الاســـم     موجود  ',
+                'name.required' => ' ادخل الاســـم  ',
 
-                'company.required' => '  ادخل    الشركة التابعة لها   ',
+                'company.required' => '  ادخل    الشركة التابعة    ',
                 'location.required' => '  ادخل   الموقع     ',
+                'type.required' => '  ادخل   النوع     ',
                 'ownership.required' => '  ادخل    الملكية   ',
                 'ownership_date.required' => '  ادخل    تاريخ التعاقد   ',
                 
             ]);
             $body = '';
             if($location->code != $request->code){
-                    $body .=  '  تم تغيير كود المنشآة من '.$location->code. ' الى '.$request->code;
+                    $body .=  '  تم تغيير الكود  من '.$location->code. ' الى '.$request->code;
                     $body.= "\r\n /";
             }   
             if($location->name != $request->name) {
-                $body .=  '  تم تغيير اسم المنشآة من ' . $location->name. ' الى '.$request->name;
+                $body .=  '  تم تغيير الاســـم  من ' . $location->name. ' الى '.$request->name;
+                $body.= "\r\n /";
+            }
+            if($location->type != $request->type) {
+                $type1 = DB::table('types')->select('*')->where('id' ,$location->type)->first();
+                $type2 = DB::table('types')->select('*')->where('id' ,$request->type)->first();
+                $body .=  '  تم تغيير النوع من ' . $type1->name. ' الى '.$type2->name;
                 $body.= "\r\n /";
             }
             if($location->company != $request->company) {
@@ -214,18 +235,39 @@ class LocationController extends Controller
                 $body .=  '  تم تغيير تاريخ التعاقد من ' . $location->ownership_date. ' الى '.$request->ownership_date;
                 $body.= "\r\n /";
             }
+            if(isset($request->capacity)){
+             if($location->capacity != $request->capacity) {
+                $body .=  '  تم تغيير  متوسط السعة   من ' . $location->capacity. ' الى '.$request->capacity;
+                $body.= "\r\n /";
+            }}
+            if(isset($request->size)){
+            if($location->size != $request->size) {
+                $body .=  '  تم تغيير المساحة  من ' . $location->size. ' الى '.$request->size;
+                $body.= "\r\n /";
+            }}
  
             $location->code =$request->code;
             $location->name = $request->name;
+            $location->type = $request->type;
             $location->company = $request->company;
             $location->location = $request->location;
             $location->ownership = $request->ownership;
             $location->ownership_date = $request->ownership_date;
+            if(isset($request->capacity)){
+                    $location->capacity = $request->capacity;
+            } else {
+                $location->capacity = null;
+            } 
+            if(isset($request->size)){
+                    $location->size = $request->size;
+            } else {
+                $location->size = null;
+            } 
             $location->notes = $request->notes;
             $location->save();
 
 
-            $title = 'تم تعديل المنشآة بنجاح';
+            $title = 'تم تعديل الموقع بنجاح';
 
 
             $request->session()->flash('EdiLocation', $title);
@@ -238,10 +280,14 @@ class LocationController extends Controller
         $companies =  DB::table('hr.companies')
                 ->select('*')
                 ->get();
-        
+
+        $types =  DB::table('types')
+                ->select('*')
+                ->get();
         
         return  back()->with([
             'location' => $location,
+            'types' => $types,
             'companies' =>$companies
         ]);
         
@@ -259,14 +305,16 @@ class LocationController extends Controller
             $location->is_delete  = 1;
             $location->save();
 
-            $title = 'تم حذف المنشآة بنجاح';
+            $title = 'تم حذف الموقع بنجاح';
 
             $auth = new AuthController();
 
             $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
+            $type = DB::table('types')->select('*')->where('id' ,$location->type)->first();
 
-            $title = 'تم   حذف منشآة  ';
-            $body =  '  تم حذف منشآة   كود  '.$location->code;$body.= "\r\n /";
+            $title = 'تم   حذف موقع  ';
+            $body =  '  تم حذف موقع   كود  '.$location->code;$body.= "\r\n /";
+            $body .=  'نوع   '.$type->name;$body.= "\r\n /";
             $body .=  'اسم   '.$location->name;$body.= "\r\n /";
             $body .=  ' الشركة التابعة لها  '.$company->name_ar;$body.= "\r\n /";
             $body .=  '   الموقع  '.$location->location;$body.= "\r\n /";
@@ -286,6 +334,8 @@ class LocationController extends Controller
             foreach ($locations as  $location) {
                     $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
                     $location->company   = $company->name_ar;
+                    $type = DB::table('types')->select('*')->where('id' ,$location->type)->first();
+                    $location->type   = $type->name;
                 }
                 
             return DataTables::of($locations) 
@@ -316,6 +366,8 @@ class LocationController extends Controller
             foreach ($locations as  $location) {
                     $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
                     $location->company   = $company->name_ar;
+                    $type = DB::table('types')->select('*')->where('id' ,$location->type)->first();
+                    $location->type   = $type->name;
                 }
                 
             return DataTables::of($locations) 
@@ -336,14 +388,16 @@ class LocationController extends Controller
             $location->is_delete  = 0;
             $location->save();
 
-            $title = 'تم استرجاع المنشآة بنجاح';
+            $title = 'تم استرجاع الموقع بنجاح';
 
             $auth = new AuthController();
 
             $company = DB::table('hr.companies')->select('*')->where('id' ,$location->company)->first();
+            $type = DB::table('types')->select('*')->where('id' ,$location->type)->first();
 
-            $title = 'تم   استرجاع منشآة  ';
-            $body =  '  تم استرجاع منشآة   كود  '.$location->code;$body.= "\r\n /";
+            $title = 'تم   استرجاع موقع  ';
+            $body =  '  تم استرجاع موقع   كود  '.$location->code;$body.= "\r\n /";
+            $body .=  'نوع   '.$type->name;$body.= "\r\n /";
             $body .=  'اسم   '.$location->name;$body.= "\r\n /";
             $body .=  ' الشركة التابعة لها  '.$company->name_ar;$body.= "\r\n /";
             $body .=  '   الموقع  '.$location->location;$body.= "\r\n /";

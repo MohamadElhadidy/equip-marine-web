@@ -12,22 +12,28 @@ use App\Http\Controllers\UserController;
 // use App\Http\Controllers\VesselsController;
 // use App\Http\Controllers\MaintenanceController;
 use App\Models\Equipment;
+use App\Models\Workshop;
+use App\Models\Location;
 
 Route::middleware(['auth','isActive'])->group(function () {
 
 Route::get('/', function () {
 
-        $ready = Equipment::where([['conditions' , 1], ['is_delete', 0]])->count();
-        $working = Equipment::where([['conditions' , 2], ['is_delete', 0]])->count();
-        $notWorking = Equipment::where([['conditions' , 3], ['is_delete', 0]])->count();
-        $maintanance =  Equipment::where([['conditions' , 4], ['is_delete', 0]])->count();
-        // $code = \OCR::scan('IMG.jpg');
+        // $ready = Equipment::where([['conditions' , 1], ['is_delete', 0]])->count();
+        // $working = Equipment::where([['conditions' , 2], ['is_delete', 0]])->count();
+        // $notWorking = Equipment::where([['conditions' , 3], ['is_delete', 0]])->count();
+        // $maintanance =  Equipment::where([['conditions' , 4], ['is_delete', 0]])->count();
+        
+        $equipments = Equipment::where([['is_delete', 0]])->count();
+        $workshops = Workshop::where([['is_delete', 0]])->count();
+        $warehouses = Location::where([['type' , 1],['is_delete', 0]])->count();
+        $sa7a = Location::where([['type' , 3],['is_delete', 0]])->count();
 
         return view('dashboard',[
-            'ready' =>$ready,
-            'working' =>$working,
-            'notWorking' =>$notWorking,
-            'maintanance' =>$maintanance
+            'equipments' =>$equipments,
+            'workshops' =>$workshops,
+            'warehouses' =>$warehouses,
+            'sa7a' =>$sa7a
         ]);    
     })->name('home');
 
@@ -54,7 +60,7 @@ Route::delete('/manufacturing/restore/{id}', [ManufacturingController::class, 'r
 Route::resource('manufacturing', ManufacturingController::class);
 
 Route::get('/locations/trash', [LocationController::class, 'trash'])->name('/locations/trash');
-Route::get('/locations', [LocationController::class, 'locationsTrash'])->name('locations');
+Route::get('/locationsTrash', [LocationController::class, 'locationsTrash'])->name('locationsTrash');
 Route::delete('/locations/restore/{id}', [LocationController::class, 'restore'])->name('/locations/restore/{id}');
 Route::get('/locationsData', [LocationController::class, 'locationsData'])->name('locationsData');
 Route::resource('locations', LocationController::class);

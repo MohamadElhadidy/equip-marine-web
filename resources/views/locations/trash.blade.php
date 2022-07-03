@@ -35,14 +35,15 @@
         <table id='table'   dir="rtl" width="100%">
             <thead>
                 <tr>
-                    <th>كود المنشآة</th>
-                    <th>اسم المنشآة</th>
+                    <th>كود </th>
+                    <th>اسم </th>
+                    <th>النوع</th>
                     <th>الشركة التابعة لها</th>
                     <th>الموقع</th>
                     <th>الملكية</th>
                     <th>تاريخ التعاقد / الشراء</th>
                     <th>تفاصيل أخرى</th>
-                    @canView('buildings','delete')
+                    @canView('locations','delete')
                     <th></th>
                     @endcanView
                 </tr>
@@ -63,8 +64,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <script>
-        $('#trashBuild'). addClass('active');
-        $("#buildings ul.dropdown-menu").css("display", "block");
+        $('#trashLoc'). addClass('active');
+        $("#locations ul.dropdown-menu").css("display", "block");
         var html = document.getElementById("headers").innerHTML;
         // CREATE
         var dt = $('#table').DataTable({
@@ -99,7 +100,7 @@
             processing: true,
             serverSide: true,
             //bLengthChange: false,
-            ajax: '/buildingsTrash',
+            ajax: '/locationsTrash',
             columns: [
                 {
                     data: 'code',
@@ -108,6 +109,10 @@
                 {
                     data: 'name',
                     name: 'name'
+                },
+                {
+                    data: 'type',
+                    name: 'type'
                 },
                 {
                     data: 'company',
@@ -129,7 +134,7 @@
                     data: 'notes',
                     name: 'notes'
                 },
-                @canView('buildings','delete')
+                @canView('locations','delete')
                 {
                     data: 'action',
                     name: 'action'
@@ -185,7 +190,7 @@
                             });
                             $.ajax({
                                 type: "DELETE",
-                                url: '/buildings/restore/'+id,
+                                url: '/locations/restore/'+id,
                                 error: function() {
                                     $.alert({
                                         title: '',

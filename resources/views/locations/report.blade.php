@@ -30,21 +30,22 @@
 
  <section class="section">
           <div class="section-header">
-            <h1>تقرير المنشآت / الساحات</h1>
+            <h1>تقريرمواقع العمل </h1>
           </div>
            <div class="section-body">
 
         <table id='table'   dir="rtl" width="100%">
             <thead>
                 <tr>
-                    <th>كود المنشآة</th>
-                    <th>اسم المنشآة</th>
+                    <th>كود </th>
+                    <th>اسم </th>
+                    <th>النوع</th>
                     <th>الشركة التابعة لها</th>
                     <th>الموقع</th>
                     <th>الملكية</th>
                     <th>تاريخ التعاقد / الشراء</th>
                     <th>تفاصيل أخرى</th>
-                    @canView('buildings','write')
+                    @canView('locations','write')
                     <th></th>
                     @endcanView
                 </tr>
@@ -65,8 +66,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <script>
-        $('#reportBuild'). addClass('active');
-        $("#buildings ul.dropdown-menu").css("display", "block");
+        $('#reportLoc'). addClass('active');
+        $("#locations ul.dropdown-menu").css("display", "block");
 
         // CREATE
         var dt = $('#table').DataTable({
@@ -101,7 +102,7 @@
             processing: true,
             serverSide: true,
             //bLengthChange: false,
-            ajax: '/buildingsData',
+            ajax: '/locationsData',
             columns: [
                 {
                     data: 'code',
@@ -110,6 +111,10 @@
                 {
                     data: 'name',
                     name: 'name'
+                }, 
+                {
+                    data: 'type',
+                    name: 'type'
                 },
                 {
                     data: 'company',
@@ -131,7 +136,7 @@
                     data: 'notes',
                     name: 'notes'
                 },
-                @canView('buildings','write')
+                @canView('locations','write')
                 {
                     data: 'action',
                     name: 'action'
@@ -186,7 +191,7 @@
                             });
                             $.ajax({
                                 type: "DELETE",
-                                url: '/buildings/'+id,
+                                url: '/locations/'+id,
                                 error: function() {
                                     $.alert({
                                         title: '',
