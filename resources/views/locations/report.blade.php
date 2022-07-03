@@ -1,5 +1,5 @@
 @extends('layout.app')
-@section('title', 'تقرير المنشأت / الساحات')
+@section('title', 'تقرير مواقع العمل  ')
 @section('style')
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
@@ -30,7 +30,7 @@
 
  <section class="section">
           <div class="section-header">
-            <h1>تقريرمواقع العمل </h1>
+            <h1>تقرير مواقع العمل </h1>
           </div>
            <div class="section-body">
 
