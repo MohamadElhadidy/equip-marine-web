@@ -44,6 +44,11 @@ class EquipmentController extends Controller
      */
     public function index()
     {
+         $auth = new AuthController();
+        $title = 'تم   الدخول على تقرير المعدات';
+        $body = $title;
+        $auth->notify(auth()->user()->id, 1, $title, $body, '/users', 'move');
+        event(new Notifications($title));
         return view('equipments.report');
     }
 
@@ -63,7 +68,12 @@ class EquipmentController extends Controller
         $locations =  DB::table('locations')
                 ->select('*')
                 ->get();
-        
+
+        $auth = new AuthController();
+        $title = 'تم   الدخول على إضافة معده';
+        $body = $title;
+        $auth->notify(auth()->user()->id, 1, $title, $body, '/users', 'move');
+        event(new Notifications($title));
         return view('equipments.create',[
             'groups' =>$groups,
             'companies' =>$companies,
@@ -400,6 +410,11 @@ class EquipmentController extends Controller
     }
     public function trash()
     {
+         $auth = new AuthController();
+        $title = 'تم   الدخول على تقرير المحذوف للمعدات';
+        $body = $title;
+        $auth->notify(auth()->user()->id, 1, $title, $body, '/users', 'move');
+        event(new Notifications($title));
         return view('equipments.trash');
     }
     

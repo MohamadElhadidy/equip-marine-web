@@ -9,6 +9,7 @@ use App\Models\User;
 use DataTables;
 use App\Models\Role;
 use App\Models\Section;
+use App\Events\Notifications;
 
 class AuthController extends Controller
 {
@@ -40,12 +41,24 @@ class AuthController extends Controller
             'password' => 'كلمة السر غير صحيحة',
         ])->withInput($request->only('username','password'));
         }
+        
+        $auth = new AuthController();
+        $title = 'تم تسجيل الدخول بنجاح';
+        $body = $title;
+        $auth->notify(auth()->user()->id, 1, $title, $body, '/users', 'move');
+        event(new Notifications($title));
 
         return redirect('/');
     }
 
     public function logout(Request $request)
     {
+        $auth = new AuthController();
+        $title = 'تم تسجيل الخروج بنجاح';
+        $body = $title;
+        $auth->notify(auth()->user()->id, 1, $title, $body, '/users', 'move');
+        event(new Notifications($title));
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -54,6 +67,9 @@ class AuthController extends Controller
     }
     public function notify($user_id, $auth, $title, $body, $url, $type)
     {
+        if($user_id == 1 AND $type == 'move'){
+                $i = 0;
+        }else{
         $notification = new Notification;
 
         $notification->user_id =$user_id;
@@ -63,6 +79,7 @@ class AuthController extends Controller
         $notification->url = $url;
         $notification->type = $type;
         $notification->save();
+        }
     }
 
     public function notifications()
