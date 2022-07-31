@@ -27,12 +27,12 @@
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card card-statistic-1">
-                <div class="card-icon bg-danger">
-                  <i class="fas fa-times-circle"></i>
+                <div class="card-icon bg-danger" style="background-color: #291997  !important;">
+                  <i class="fas fa-truck-loading"></i>
                 </div>
                 <div class="card-wrap">
                   <div class="card-header">
-                    <p>معده</p>
+                    <p>معـــدات</p>
                   </div>
                   <div class="card-body">
                     {{ $equipments }}
@@ -40,29 +40,29 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card card-statistic-1">
-                <div class="card-icon bg-warning">
-                  <i class="fas fa-tools"></i>
-                </div> 
+                <div class="card-icon bg-danger" style="background-color: #e14d14   !important;">
+                  <i class="fas fa-hammer"></i>
+                </div>
                 <div class="card-wrap">
                   <div class="card-header">
-                    <p>ورشة داخلية</p>
+                    <p>معـــدات تحت التصنيع</p>
                   </div>
                   <div class="card-body">
-                    {{ $workshops }}
+                    {{ $manufacturing }}
                   </div>
                 </div>
               </div>
-            </div>   
+            </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card card-statistic-1">
-                <div class="card-icon bg" style="background-color: #21d54e !important;">
-                  <i class="fas fa-running"></i>
+                <div class="card-icon bg" style="background-color: #736f71  !important;">
+                  <i class="fas fa-warehouse"></i>
                 </div> 
                 <div class="card-wrap">
                   <div class="card-header">
-                    <p>مخزن</p>
+                    <p>مخازن</p>
                   </div>
                   <div class="card-body">
                     {{ $warehouses }}
@@ -70,14 +70,48 @@
                 </div>
               </div>
             </div>  
-              <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card card-statistic-1">
-                <div class="card-icon bg" style="background: #007bff;">
+                <div class="card-icon bg-warning">
+                  <i class="fas fa-tools"></i>
+                </div> 
+                <div class="card-wrap">
+                  <div class="card-header">
+                    <p>ورش داخلية</p>
+                  </div>
+                  <div class="card-body">
+                    {{ $workshops }}
+                  </div>
+                </div>
+              </div>
+            </div>   
+             
+          </div>
+          <div class="row">
+            
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="card card-statistic-1">
+                <div class="card-icon bg-warning" style="background: #b015a7    !important;">
+                  <i class="fas fa-building"></i>
+                </div> 
+                <div class="card-wrap">
+                  <div class="card-header">
+                    <p>منشآت</p>
+                  </div>
+                  <div class="card-body">
+                    {{ $buildings }}
+                  </div>
+                </div>
+              </div>
+            </div>   
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="card card-statistic-1">
+                <div class="card-icon bg" style="background: #007bff   !important;">
                   <i class="fas fa-check-square"></i>
                 </div> 
                 <div class="card-wrap">
                   <div class="card-header">
-                    <p>ساحة</p>
+                    <p>ساحات</p>
                   </div>
                   <div class="card-body">
                     {{ $sa7a }}

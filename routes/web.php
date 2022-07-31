@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Equipment;
 use App\Models\Workshop;
 use App\Models\Location;
+use App\Models\Manufacturing;
 
 Route::middleware(['auth','isActive'])->group(function () {
 
@@ -25,14 +26,18 @@ Route::get('/', function () {
         // $maintanance =  Equipment::where([['conditions' , 4], ['is_delete', 0]])->count();
         
         $equipments = Equipment::where([['is_delete', 0]])->count();
+        $manufacturing = Manufacturing::where([['is_delete', 0], ['done', 0]])->count();
         $workshops = Workshop::where([['is_delete', 0]])->count();
         $warehouses = Location::where([['type' , 1],['is_delete', 0]])->count();
         $sa7a = Location::where([['type' , 3],['is_delete', 0]])->count();
+        $buildings = Location::where([['type' , 2],['is_delete', 0]])->count();
 
         return view('dashboard',[
             'equipments' =>$equipments,
+            'manufacturing' =>$manufacturing,
             'workshops' =>$workshops,
             'warehouses' =>$warehouses,
+            'buildings' =>$buildings,
             'sa7a' =>$sa7a
         ]);    
     })->name('home');
